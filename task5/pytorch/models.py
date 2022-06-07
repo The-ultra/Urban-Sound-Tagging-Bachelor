@@ -23,14 +23,12 @@ class GCNN(nn.Module):
         if n_aux is not None:
             #  Added  Time2Vec(n_aux, n_aux_out)
             self.aux_fc = Time2Vec(n_aux, n_aux_out)
-
             self.aux_fc = nn.Linear(n_aux, n_aux_out)
-            # changing from BatchNorm1d(n_aux_out) to GroupNorm(num_channels=self.out_channels, num_groups=32)
             self.aux_bn = nn.BatchNorm1d(n_aux_out)
 
 
-        # changed nn.Linear(512 + n_aux_out, n_classes) to Time2Vec(512 + n_aux_out, n_classes)
-        self.classifier = Time2Vec(512 + n_aux_out, n_classes)
+       
+        self.classifier = nn.Linear(512 + n_aux_out, n_classes)
 
     def forward(self, x):
         if isinstance(x, tuple):
